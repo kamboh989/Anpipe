@@ -137,10 +137,15 @@ export default function Background3D({ preset = 'hero' }: Background3DProps) {
   const [isVisible, setIsVisible] = useState(preset === 'hero');
 
   useEffect(() => {
-    if (preset === 'hero') return;
     const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { threshold: 0.1 }
+      ([entry]) => {
+        // Only set visible if intersecting to save resources
+        setIsVisible(entry.isIntersecting);
+      },
+      { 
+        threshold: 0.01, // Trigger as soon as a tiny bit is visible
+        rootMargin: '200px' // Start loading/rendering before it actually enters view
+      }
     );
     if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();

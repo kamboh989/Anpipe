@@ -83,7 +83,7 @@ export const Profile = () => {
                 className="relative group overflow-hidden rounded-xl border-2 border-white/10 shadow-2xl shadow-primary/20 hover:border-primary transition-all duration-300 h-full"
               >
                 <img
-                  src="./facility1.jpg"
+                  src="./Team1.png"
                   alt="Manufacturing Facility"
                   loading="lazy"
                   className="w-full h-[300px] object-cover transform group-hover:scale-110 transition-transform duration-700"
@@ -102,7 +102,7 @@ export const Profile = () => {
                 className="relative group overflow-hidden rounded-xl border-2 border-white/10 shadow-xl hover:border-primary transition-all duration-300 h-full"
               >
                 <img
-                  src="./facility2.jpg"
+                  src="./Team2.png"
                   alt="Inventory"
                   loading="lazy"
                   className="w-full h-[200px] object-cover transform group-hover:scale-110 transition-transform duration-700"
@@ -121,7 +121,7 @@ export const Profile = () => {
                 className="relative group overflow-hidden rounded-xl border-2 border-white/10 shadow-xl hover:border-primary transition-all duration-300 h-full"
               >
                 <img
-                  src="./facility3.jpg"
+                  src="./Team3.png"
                   alt="Quality Control"
                   loading="lazy"
                   className="w-full h-[200px] object-cover transform group-hover:scale-110 transition-transform duration-700"
