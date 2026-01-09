@@ -1,10 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #1A365D;
+  /* Dark Blue */
+  --color-secondary: #0A0A0A;
+  /* Black */
+  --color-accent: #1A365D;
+  /* Dark Blue (mapped to primary for strictness) */
+  --color-text-muted: #64748B;
+  /* Gray */
+  --color-bg-light: #FFFFFF;
+  /* White */
+
+  --font-sans: "Inter", sans-serif;
+  --font-heading: "Montserrat", sans-serif;
+}
+
+/* Global Dark Theme */
+body {
+  background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 50%, #0A0A0A 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #FFFFFF;
+}
 
 @keyframes bookOpen {
   from {
     transform: scaleX(0.9);
     opacity: 0;
   }
+
   to {
     transform: scaleX(1);
     opacity: 1;
@@ -15,6 +41,7 @@
   from {
     transform: rotateY(-15deg);
   }
+
   to {
     transform: rotateY(0deg);
   }
@@ -30,4 +57,76 @@
 
 .perspective {
   perspective: 1500px;
+}
+
+/* Global Interactive Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+button,
+a,
+[role="button"] {
+  cursor: pointer;
+}
+
+/* Modern Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0A0A0A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1A365D;
+  border-radius: 10px;
+  border: 2px solid #0A0A0A;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2563EB;
+}
+
+/* 3D Depth Utilities */
+.perspective-container {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.depth-1 {
+  transform: translateZ(10px);
+}
+
+.depth-2 {
+  transform: translateZ(20px);
+}
+
+.depth-3 {
+  transform: translateZ(40px);
+}
+
+.depth-4 {
+  transform: translateZ(60px);
+}
+
+.glow-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }

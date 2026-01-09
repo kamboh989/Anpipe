@@ -1,78 +1,8 @@
 import { useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-
-// ------------------ Accordion Components ------------------
-const Accordion = ({ children, defaultValue, onValueChange }: any) => {
-  const [value, setValue] = useState(defaultValue);
-
-  const handleChange = (newValue: string) => {
-    setValue(newValue);
-    onValueChange?.(newValue);
-  };
-
-  return (
-    <div>
-      {children.map((child: any) =>
-        child && typeof child === "object"
-          ? {
-              ...child,
-              props: {
-                ...child.props,
-                isOpen: value === child.props.value,
-                onToggle: () =>
-                  handleChange(
-                    value === child.props.value ? "" : child.props.value
-                  ),
-              },
-            }
-          : child
-      )}
-    </div>
-  );
-};
-
-const AccordionItem = ({ children, isOpen, onToggle }: any) => {
-  return (
-    <div className="border-b border-gray-200">
-      {children.map((child: any) =>
-        child && typeof child === "object"
-          ? { ...child, props: { ...child.props, isOpen, onToggle } }
-          : child
-      )}
-    </div>
-  );
-};
-
-const AccordionTrigger = ({ children, className, isOpen, onToggle }: any) => {
-  return (
-    <button
-      onClick={onToggle}
-      className={`${className} w-full flex justify-between items-center transition-colors  ${
-        isOpen ? "text-[#fece1a]" : "text-gray-800"
-      }`}
-    >
-      {children}
-      <svg
-        className={`w-5 h-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M19 9l-7 7-7-7"
-        />
-      </svg>
-    </button>
-  );
-};
-
-const AccordionContent = ({ children, isOpen }: any) => {
-  if (!isOpen) return null;
-  return <div className="overflow-hidden">{children}</div>;
-};
+import { motion } from "framer-motion";
+import { TiltCard } from "../../components/3d/TiltCard";
+import Background3D from "../../components/3d/Background3D";
 
 
 // ------------------ Zoomable Image Component ------------------
@@ -259,12 +189,9 @@ const products = [
 
 // ------------------ Main Product Component ------------------
 export default function Product() {
-  const [activeItem, setActiveItem] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const activeProduct = products.find((item) => item.id === activeItem) || products[0];
 
   const openModal = (product: typeof products[0]) => {
     setSelectedProduct(product);
@@ -295,85 +222,105 @@ export default function Product() {
   };
 
   return (
-    <section className="py-20">
-      <h2
-        className="text-4xl font-semibold mb-10 flex justify-center text-[#fece1a]"
-        style={{ fontFamily: "'Altmann Grotesk', sans-serif" }}
+    <section id="products" className="py-24 relative overflow-hidden">
+      <Background3D preset="products" />
+
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="text-center mb-16 relative z-10"
       >
-        OUR PRODUCTS
-      </h2>
+        <div className="inline-block px-4 py-2 bg-primary/20 backdrop-blur-sm border border-primary/50 rounded-full text-primary text-sm font-semibold uppercase tracking-wider mb-4">
+          Our Products
+        </div>
+        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 font-heading uppercase tracking-tight">
+          Premium <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Steel Solutions</span>
+        </h2>
+        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          Explore our comprehensive range of high-quality steel pipes and tubes
+        </p>
+      </motion.div>
 
-      <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
-        {/* LEFT: Accordion */}
-        <div>
-          <Accordion
-            defaultValue="item-1"
-            onValueChange={(value: string) => {
-              if (value) setActiveItem(Number(value.split("-")[1]));
-            }}
-          >
-            {products.map((product) => (
-              <AccordionItem key={product.id} value={`item-${product.id}`}>
-                <AccordionTrigger
-                  className="px-0 py-5 text-left font-semibold text-lg hover:no-underline"
-                  style={{ fontFamily: "'Altmann Grotesk', sans-serif" }}
-                >
-                  {product.title}
-                </AccordionTrigger>
+      {/* Products Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {products.map((product, index) => (
+            <TiltCard key={product.id} className="h-full">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="group bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden hover:border-primary transition-all duration-300 hover:shadow-2xl hover:shadow-primary/20 flex flex-col h-full"
+              >
+                {/* Product Image */}
+                <div className="relative h-64 overflow-hidden bg-gray-800/50">
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    loading="lazy"
+                    className="w-full h-full object-contain p-6 transform group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                </div>
 
-                <AccordionContent className="px-6 pb-6">
-                  <div className="animate-fadeIn">
-                    <ul className="space-y-3 text-gray-700" style={{ fontFamily: "'Fenomen Sans', sans-serif" }}>
-                      {product.specs.map((spec, index) => (
-                        <li key={index} className="flex justify-between pb-2">
-                          <span className="font-medium">{spec.label}</span>
-                          <span className="text-right">{spec.value}</span>
-                        </li>
-                      ))}
-                    </ul>
+                {/* Product Content */}
+                <div className="p-6 flex flex-col flex-grow">
+                  {/* Title */}
+                  <h3 className="text-xl font-bold text-white mb-4 font-heading uppercase tracking-wide group-hover:text-primary transition-colors duration-300">
+                    {product.title}
+                  </h3>
 
-                    <button
-                      onClick={() => openModal(product)}
-                      className="mt-6 inline-block px-6 py-2 text-sm font-semibold border-2 border-[#fece1a] text-[#fece1a] rounded-full hover:bg-[#fece1a] hover:text-white transition-all duration-300"
-                    >
-                      Read More
-                    </button>
+                  {/* Specs - Show first 4 */}
+                  <div className="space-y-2 mb-6 flex-grow">
+                    {product.specs.slice(0, 4).map((spec, idx) => (
+                      <div key={idx} className="flex justify-between text-sm">
+                        <span className="text-gray-400">{spec.label}:</span>
+                        <span className="text-gray-300 font-semibold text-right ml-2">{spec.value}</span>
+                      </div>
+                    ))}
+                    {product.specs.length > 4 && (
+                      <div className="text-primary text-sm font-semibold pt-2">
+                        +{product.specs.length - 4} more specifications
+                      </div>
+                    )}
                   </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
 
-        {/* RIGHT: Fixed Image */}
-        <div className="flex items-center justify-center lg:sticky lg:top-32">
-          <div className="relative rounded-3xl overflow-hidden w-full max-w-md shadow-2xl">
-            <img
-              src={activeProduct.image}
-              alt={activeProduct.title}
-              className="w-full h-[450px] object-cover rounded-3xl"
-            />
-          </div>
+                  {/* Button */}
+                  <button
+                    onClick={() => openModal(product)}
+                    className="w-full px-6 py-3 bg-primary/10 backdrop-blur-sm text-primary rounded-lg font-semibold border-2 border-primary/30 hover:bg-primary hover:text-white transition-all duration-300 font-heading uppercase tracking-wider hover:scale-105"
+                  >
+                    View Full Details
+                  </button>
+                </div>
+
+                {/* Hover Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              </motion.div>
+            </TiltCard>
+          ))}
         </div>
-      </div>
 
       {/* MODAL */}
       {isModalOpen && selectedProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-secondary/95 backdrop-blur-sm">
           {/* Close */}
           <button
             onClick={closeModal}
-            className="absolute top-4 right-4 sm:top-8 sm:right-8 z-50 p-2 bg-white rounded-full hover:bg-gray-200 transition-all"
+            className="absolute top-4 right-4 sm:top-8 sm:right-8 z-50 p-2 bg-white rounded-full hover:bg-gray-200 transition-all shadow-lg"
           >
-            <X className="w-6 h-6 text-gray-800" />
+            <X className="w-6 h-6 text-secondary" />
           </button>
 
           {/* Previous */}
           <button
             onClick={prevImage}
-            className="absolute left-4 sm:left-8 z-50 p-3 bg-white rounded-full hover:bg-gray-200 transition-all"
+            className="absolute left-4 sm:left-8 z-50 p-3 bg-white rounded-full hover:bg-gray-200 transition-all shadow-lg"
           >
-            <ChevronLeft className="w-6 h-6 text-gray-800" />
+            <ChevronLeft className="w-6 h-6 text-secondary" />
           </button>
 
           {/* Image */}
@@ -382,7 +329,7 @@ export default function Product() {
               src={selectedProduct.detailImages[currentImageIndex]}
               alt={`${selectedProduct.title} detail ${currentImageIndex + 1}`}
             />
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-full text-sm font-semibold">
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white px-6 py-2 rounded-full text-sm font-bold shadow-lg text-secondary">
               {currentImageIndex + 1} / {selectedProduct.detailImages.length}
             </div>
           </div>
@@ -390,9 +337,9 @@ export default function Product() {
           {/* Next */}
           <button
             onClick={nextImage}
-            className="absolute right-4 sm:right-8 z-50 p-3 bg-white rounded-full hover:bg-gray-200 transition-all"
+            className="absolute right-4 sm:right-8 z-50 p-3 bg-white rounded-full hover:bg-gray-200 transition-all shadow-lg"
           >
-            <ChevronRight className="w-6 h-6 text-gray-800" />
+            <ChevronRight className="w-6 h-6 text-secondary" />
           </button>
         </div>
       )}
