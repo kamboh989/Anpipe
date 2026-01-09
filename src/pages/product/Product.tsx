@@ -74,33 +74,87 @@ const AccordionContent = ({ children, isOpen }: any) => {
   return <div className="overflow-hidden">{children}</div>;
 };
 
+
 // ------------------ Zoomable Image Component ------------------
 const ZoomableImage = ({ src, alt }: { src: string; alt: string }) => {
   const [scale, setScale] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  const zoomIn = () => setScale((prev) => Math.min(prev + 0.2, 3));
-  const zoomOut = () => setScale((prev) => Math.max(prev - 0.2, 1));
+  const zoomIn = () => setScale((prev) => Math.min(prev + 0.3, 4));
+  const zoomOut = () => {
+    setScale((prev) => {
+      const newScale = Math.max(prev - 0.3, 1);
+      if (newScale === 1) {
+        setPosition({ x: 0, y: 0 });
+      }
+      return newScale;
+    });
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (scale > 1) {
+      setIsDragging(true);
+      setDragStart({ x: e.clientX - position.x, y: e.clientY - position.y });
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isDragging && scale > 1) {
+      setPosition({
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y,
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="overflow-hidden border rounded-lg max-w-full max-h-[500px]">
+    <div className="flex flex-col items-center w-full">
+      <div
+        className="relative overflow-hidden border-2  rounded-lg  flex items-center justify-center"
+        style={{ 
+          width: '90vw', 
+          maxWidth: '1200px', 
+          height: '80vh',
+          maxHeight: '800px',
+          cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'
+        }}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+      >
         <img
           src={src}
           alt={alt}
-          className="transition-transform duration-200 w-full h-full "
-          style={{ transform: `scale(${scale})` }}
+          className="transition-transform duration-200 max-w-full max-h-full object-contain select-none"
+          style={{
+            transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
+            transformOrigin: 'center center'
+          }}
+          draggable={false}
         />
       </div>
-      <div className="flex mt-4 gap-4">
+      <div className="flex mt-6 gap-4 bg-gray-800 px-6 py-2 rounded-full">
         <button
           onClick={zoomOut}
-          className="px-4 py-2 bg-white text-gray-800 rounded-full border hover:bg-gray-200 transition-all"
+          disabled={scale === 1}
+          className="px-3 py-1 bg-white text-gray-800 rounded-full border-2 hover:bg-gray-200 transition-all font-bold text-md disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          -
+          −
         </button>
+        <span className="px-3 py-1 text-white font-semibold flex items-center">
+          {Math.round(scale * 100)}%
+        </span>
         <button
           onClick={zoomIn}
-          className="px-4 py-2 bg-white text-gray-800 rounded-full border hover:bg-gray-200 transition-all"
+          disabled={scale >= 4}
+          className="px-3 py-1 bg-white text-gray-800 rounded-full border-2 hover:bg-gray-200 transition-all font-bold text-md disabled:opacity-50 disabled:cursor-not-allowed"
         >
           +
         </button>
@@ -108,7 +162,6 @@ const ZoomableImage = ({ src, alt }: { src: string; alt: string }) => {
     </div>
   );
 };
-
 // ------------------ Product Data ------------------
 const products = [
   {

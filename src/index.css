@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+@keyframes bookOpen {
+  from {
+    transform: scaleX(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pageFlip {
+  from {
+    transform: rotateY(-15deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
+}
+
+.animate-bookOpen {
+  animation: bookOpen 0.7s ease forwards;
+}
+
+.animate-pageFlip {
+  animation: pageFlip 0.6s ease;
+}
+
+.perspective {
+  perspective: 1500px;
+}
