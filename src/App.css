@@ -1,0 +1,21 @@
+@font-face {
+  font-family: 'Altmann Grotesk';
+  src: local('Altmann Grotesk Medium'), local('Altmann-Grotesk-Medium'),
+       url('/fonts/AltmannGrotesk-Medium.woff2') format('woff2'),
+       url('/fonts/AltmannGrotesk-Medium.woff') format('woff'),
+       url('/fonts/AltmannGrotesk-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'FenomenSans-SCNBook';
+  src: url('/fonts/FenomenSans-SCNBook.eot');
+  src: local('Fenomen Sans SCN Book'), local('FenomenSans-SCNBook'),
+       url('/fonts/FenomenSans-SCNBook.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/FenomenSans-SCNBook.woff2') format('woff2'),
+       url('/fonts/FenomenSans-SCNBook.woff') format('woff'),
+       url('/fonts/FenomenSans-SCNBook.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
