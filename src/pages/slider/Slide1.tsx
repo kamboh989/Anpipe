@@ -1,7 +1,6 @@
 import { BsArrowRight } from "react-icons/bs";
 import { motion } from "framer-motion";
 import { Award, Shield, TrendingUp } from "lucide-react";
-import Background3D from "../../components/3d/Background3D";
 import { TiltCard } from "../../components/3d/TiltCard";
 
 const Slide1 = () => {
@@ -11,8 +10,7 @@ const Slide1 = () => {
   };
 
   return (
-    <div className="relative w-full min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black">
-      <Background3D />
+    <div className="relative w-full min-h-screen flex items-center overflow-hidden">
 
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
@@ -122,7 +120,7 @@ const Slide1 = () => {
                 {/* Main Image Container */}
                 <div className="relative rounded-2xl overflow-hidden border-2 border-white/10 shadow-2xl shadow-primary/20">
                   <img
-                    src="./hero.jpg"
+                    src="/hero.jpg"
                     alt="Steel Pipes Manufacturing"
                     className="w-full h-[600px] object-cover"
                   />

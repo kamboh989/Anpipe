@@ -1,356 +1,243 @@
 import { useState } from "react";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { Package, Shield, ArrowRight, X, ChevronRight, Settings, Info } from "lucide-react";
 import { TiltCard } from "../../components/3d/TiltCard";
-import Background3D from "../../components/3d/Background3D";
 
+interface ProductType {
+  id: number;
+  title: string;
+  subtitle: string;
+  description: string;
+  specs: string[];
+  image: string;
+  icon: any;
+  category: "Industrial" | "Commercial" | "Structural";
+}
 
-// ------------------ Zoomable Image Component ------------------
-const ZoomableImage = ({ src, alt }: { src: string; alt: string }) => {
-  const [scale, setScale] = useState(1);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-
-  const zoomIn = () => setScale((prev) => Math.min(prev + 0.3, 4));
-  const zoomOut = () => {
-    setScale((prev) => {
-      const newScale = Math.max(prev - 0.3, 1);
-      if (newScale === 1) {
-        setPosition({ x: 0, y: 0 });
-      }
-      return newScale;
-    });
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (scale > 1) {
-      setIsDragging(true);
-      setDragStart({ x: e.clientX - position.x, y: e.clientY - position.y });
-    }
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (isDragging && scale > 1) {
-      setPosition({
-        x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y,
-      });
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  return (
-    <div className="flex flex-col items-center w-full">
-      <div
-        className="relative overflow-hidden border-2  rounded-lg  flex items-center justify-center"
-        style={{ 
-          width: '90vw', 
-          maxWidth: '1200px', 
-          height: '80vh',
-          maxHeight: '800px',
-          cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'
-        }}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-      >
-        <img
-          src={src}
-          alt={alt}
-          className="transition-transform duration-200 max-w-full max-h-full object-contain select-none"
-          style={{
-            transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
-            transformOrigin: 'center center'
-          }}
-          draggable={false}
-        />
-      </div>
-      <div className="flex mt-6 gap-4 bg-gray-800 px-6 py-2 rounded-full">
-        <button
-          onClick={zoomOut}
-          disabled={scale === 1}
-          className="px-3 py-1 bg-white text-gray-800 rounded-full border-2 hover:bg-gray-200 transition-all font-bold text-md disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          −
-        </button>
-        <span className="px-3 py-1 text-white font-semibold flex items-center">
-          {Math.round(scale * 100)}%
-        </span>
-        <button
-          onClick={zoomIn}
-          disabled={scale >= 4}
-          className="px-3 py-1 bg-white text-gray-800 rounded-full border-2 hover:bg-gray-200 transition-all font-bold text-md disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          +
-        </button>
-      </div>
-    </div>
-  );
-};
-// ------------------ Product Data ------------------
-const products = [
+const products: ProductType[] = [
   {
     id: 1,
-    title: "GALVANIZED IRON PIPE",
-    image: "./iron-pipe.png",
-    detailImages: ["./Galvinzed Pipe-page-001.jpg", "./Galvinzed Pipe-page-002.jpg"],
-    specs: [
-      { label: "Size", value: "1/2 - 12 (Inches)" },
-      { label: "Thickness", value: "2mm To 12mm" },
-      { label: "Material", value: "Prime Hot Rolled" },
-      { label: "Surface", value: "Hot Dipped Galvanized" },
-      { label: "Standard", value: "EN 10255:2004, BS 1387-1985, ASTM A53" },
-      { label: "Certification", value: "ISO 9001:2008" },
-      { label: "End", value: "Threaded, Plain" },
-    ],
+    title: "G.I. Pipes",
+    subtitle: "Galvanized Iron Pipes",
+    category: "Industrial",
+    description: "Our high-precision G.I. pipes offer superior corrosion resistance and structural longevity, perfect for demanding industrial environments and water transport systems.",
+    specs: ["Anti-Corrosive Coating", "ASTM Standard", "Schedule 40/80", "Length: 6m - 12m"],
+    image: "/iron-pipe.png",
+    icon: Package
   },
   {
     id: 2,
-    title: "ERW MS BLACK PIPE",
-    image: "./ms-pipe.png",
-    detailImages: ["./MS Pipe-page-001.jpg", "./MS Pipe-page-002.jpg"],
-    specs: [
-      { label: "Size", value: "1/2 to 12 Inches" },
-      { label: "Thickness", value: "1.6mm To 12mm" },
-      { label: "Material", value: "Prime Hot Rolled, Cold Rolled" },
-      { label: "Surface", value: "Bared, Painted, Anti Rust Coating" },
-      { label: "Standard", value: "ASTM A53 Grade A&B, API 5L-B" },
-      { label: "Certification", value: "ISO 9001:2008" },
-      { label: "End", value: "Plain, Beveled" },
-    ],
+    title: "M.S. Pipes",
+    subtitle: "Mild Steel Hollow Sections",
+    category: "Structural",
+    description: "M.S. pipes engineered for maximum load-bearing capacity, ensuring the safety and stability of large-scale infrastructure projects.",
+    specs: ["High Tensile Strength", "Black Finish", "Round/Square/Rect.", "Wall: 1.5mm - 12mm"],
+    image: "/ms-pipe.png",
+    icon: Shield
   },
   {
-        id: 3,
-        title: "PROFILE TUBE",
-        image: "./profile-tube.jpg",
-        detailImages: ["./PDF Profile -11.jpg", "./PDF Profile -12.jpg"],
-        specs: [
-            { label: "Size", value: "L, T, Z, D Type Profiles" },
-            { label: "Thickness", value: "0.6mm - 2mm" },
-            { label: "Material", value: "Prime Cold Rolled and Hot Rolled" },
-            { label: "Surface", value: "Bared, Painted, Anti Rust Coating" },
-            { label: "Standard", value: "EN 10305-5, BS 6323-5" },
-            { label: "Certification", value: "ISO 9001:2008" },
-            { label: "End", value: "Plain" },
-        ],
-    },
-    {
-        id: 4,
-        title: "SCAFFOLDING PIPE",
-        image: "./scaffolding-pipe.png",
-        detailImages: ["./Scaffolding Tubes-page-001.jpg", "./Scaffolding Tubes-page-001.jpg"],
-        specs: [
-            { label: "Size", value: "1/2 - 12 (Inches)" },
-            { label: "Thickness", value: "3mm & 4mm" },
-            { label: "Material", value: "Prime Hot Rolled" },
-            { label: "Surface", value: "Bared & Hot Dipped Galvanized" },
-            { label: "Standard", value: "BS EN 39:2001" },
-            { label: "Certification", value: "ISO 9001:2008" },
-            { label: "End", value: "Plain, Beveled" },
-        ],
-    },
-    {
-        id: 5,
-        title: "SQUARE TUBE",
-        image: "./square-tube.png",
-        detailImages: ["./RHS,SHS, Conduite-page-001.jpg", "./RHS,SHS, Conduite-page-002.jpg"],
-        specs: [
-            { label: "Size", value: "12X12mm TO 50x50mm" },
-            { label: "Thickness", value: "0.6mm TO 2mm" },
-            { label: "Material", value: "Prime Hot Rolled and Hot Rolled" },
-            { label: "Surface", value: "Bared, Painted, Anti Rust Coating," },
-            { label: "Standard", value: "EN 10305-5, BS 6323-5" },
-            { label: "Certification", value: "ISO 9001:2008" },
-            { label: "End", value: "Plain" },
-        ],
-    },
-    {
-        id: 6,
-        title: "ERW FILTER STEEL PIPE",
-        image: "./steel-pipe.png",
-        detailImages: ["./MS Pipe-page-001 (2).jpg", "./MS Pipe-page-002 (2).jpg"],
-        specs: [
-            { label: "Size", value: " 6 TO 12 (Inches)" },
-            { label: "Thickness", value: "4mm TO 12mm" },
-            { label: "Material", value: "Prime Hot Rolled" },
-            { label: "Surface", value: "Bared, Painted, Anti Rust Coating," },
-            { label: "Standard", value: "ASTM A53" },
-            { label: "Certification", value: "ISO 9001:2008" },
-            { label: "End", value: "Plain" },
-        ],
-    },
-  // Add more products as needed...
+    id: 3,
+    title: "Scaffolding Tube",
+    subtitle: "Construction Safety Systems",
+    category: "Structural",
+    description: "Premium scaffolding tubes designed for extreme reliability. Built to withstand high pressure and ensure worker safety on elevation.",
+    specs: ["BS 1139 Certified", "Zinc Coated", "High Impact Res.", "Standard lengths avail."],
+    image: "/scaffolding-pipe.png",
+    icon: Settings
+  }
 ];
 
-// ------------------ Main Product Component ------------------
 export default function Product() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>("All");
 
-  const openModal = (product: typeof products[0]) => {
-    setSelectedProduct(product);
-    setCurrentImageIndex(0);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedProduct(null);
-    setCurrentImageIndex(0);
-  };
-
-  const nextImage = () => {
-    if (selectedProduct) {
-      setCurrentImageIndex((prev) =>
-        prev === selectedProduct.detailImages.length - 1 ? 0 : prev + 1
-      );
-    }
-  };
-
-  const prevImage = () => {
-    if (selectedProduct) {
-      setCurrentImageIndex((prev) =>
-        prev === 0 ? selectedProduct.detailImages.length - 1 : prev - 1
-      );
-    }
-  };
+  const categories = ["All", "Industrial", "Structural", "Commercial"];
+  const filteredProducts = activeCategory === "All" 
+    ? products 
+    : products.filter(p => p.category === activeCategory);
 
   return (
-    <section id="products" className="py-24 relative overflow-hidden">
-      <Background3D preset="products" />
+    <section id="products" className="py-32 relative overflow-hidden bg-transparent">
+      {/* Background Decor */}
+      <div className="absolute inset-0 z-0 opacity-[0.02]" style={{
+        backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(37, 99, 235, 0.5) 1px, transparent 0)',
+        backgroundSize: '40px 40px'
+      }}></div>
 
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        className="text-center mb-16 relative z-10"
-      >
-        <div className="inline-block px-4 py-2 bg-primary/20 backdrop-blur-sm border border-primary/50 rounded-full text-primary text-sm font-semibold uppercase tracking-wider mb-4">
-          Our Products
-        </div>
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 font-heading uppercase tracking-tight">
-          Premium <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Steel Solutions</span>
-        </h2>
-        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-          Explore our comprehensive range of high-quality steel pipes and tubes
-        </p>
-      </motion.div>
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        
+        {/* Cinematic Header */}
+        <div className="mb-16 md:mb-24 relative">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            className="flex flex-col gap-4 md:gap-6 text-center md:text-left"
+          >
+            <div className="flex items-center justify-center md:justify-start gap-4">
+               <div className="w-8 md:w-12 h-1 bg-primary"></div>
+               <span className="text-primary font-black uppercase tracking-[0.4em] text-[10px] md:text-xs">Capabilities</span>
+            </div>
+            <h2 className="text-4xl sm:text-6xl md:text-8xl font-black text-white font-heading leading-tight md:leading-none uppercase tracking-tighter">
+              Precision <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Inventory</span>
+            </h2>
+          </motion.div>
 
-      {/* Products Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product, index) => (
-            <TiltCard key={product.id} className="h-full">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="group bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden hover:border-primary transition-all duration-300 hover:shadow-2xl hover:shadow-primary/20 flex flex-col h-full"
+          {/* Category Filter */}
+          <div className="mt-10 md:mt-12 flex flex-wrap justify-center md:justify-start gap-3 md:gap-4">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-6 md:px-8 py-2.5 md:py-3 rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all duration-300 ${
+                  activeCategory === cat 
+                    ? "bg-primary text-white shadow-xl shadow-primary/20" 
+                    : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+                }`}
               >
-                {/* Product Image */}
-                <div className="relative h-64 overflow-hidden bg-gray-800/50">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    loading="lazy"
-                    className="w-full h-full object-contain p-6 transform group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                </div>
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
 
-                {/* Product Content */}
-                <div className="p-6 flex flex-col flex-grow">
-                  {/* Title */}
-                  <h3 className="text-xl font-bold text-white mb-4 font-heading uppercase tracking-wide group-hover:text-primary transition-colors duration-300">
-                    {product.title}
-                  </h3>
-
-                  {/* Specs - Show first 4 */}
-                  <div className="space-y-2 mb-6 flex-grow">
-                    {product.specs.slice(0, 4).map((spec, idx) => (
-                      <div key={idx} className="flex justify-between text-sm">
-                        <span className="text-gray-400">{spec.label}:</span>
-                        <span className="text-gray-300 font-semibold text-right ml-2">{spec.value}</span>
-                      </div>
-                    ))}
-                    {product.specs.length > 4 && (
-                      <div className="text-primary text-sm font-semibold pt-2">
-                        +{product.specs.length - 4} more specifications
-                      </div>
-                    )}
+        {/* Product Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {filteredProducts.map((product, idx) => (
+            <motion.div
+              key={product.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              viewport={{ once: true }}
+            >
+              <TiltCard tiltMax={10} scale={1.02}>
+                <div 
+                  className="group relative bg-[#0a0f1d] border border-white/5 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden cursor-pointer h-full hover:border-primary/50 transition-colors duration-500"
+                  onClick={() => setSelectedProduct(product)}
+                >
+                  <div className="aspect-[4/3] overflow-hidden">
+                    <img 
+                      src={product.image} 
+                      alt={product.title} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1d] via-[#0a0f1d]/20 to-transparent"></div>
                   </div>
 
-                  {/* Button */}
-                  <button
-                    onClick={() => openModal(product)}
-                    className="w-full px-6 py-3 bg-primary/10 backdrop-blur-sm text-primary rounded-lg font-semibold border-2 border-primary/30 hover:bg-primary hover:text-white transition-all duration-300 font-heading uppercase tracking-wider hover:scale-105"
-                  >
-                    View Full Details
-                  </button>
-                </div>
+                  <div className="p-6 md:p-8 space-y-3 md:space-y-4">
+                    <span className="text-primary text-[10px] font-black uppercase tracking-[0.3em]">{product.category}</span>
+                    <h3 className="text-2xl md:text-3xl font-black text-white font-heading uppercase tracking-tight">{product.title}</h3>
+                    <p className="text-gray-400 text-xs md:text-sm font-light leading-relaxed line-clamp-2">{product.description}</p>
+                    <div className="pt-2 md:pt-4 flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-primary group-hover:gap-4 transition-all">
+                        <span className="text-[10px] md:text-xs font-black uppercase tracking-widest">Detail</span>
+                        <ChevronRight size={14} className="md:w-4 md:h-4" />
+                      </div>
+                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+                         <product.icon size={14} className="text-primary md:w-[18px] md:h-[18px]" />
+                      </div>
+                    </div>
+                  </div>
 
-                {/* Hover Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-              </motion.div>
-            </TiltCard>
+                  {/* Blueprint Texture Overlay */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-[0.03] pointer-events-none transition-opacity duration-700" style={{
+                    backgroundImage: 'linear-gradient(rgba(37, 99, 235, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(37, 99, 235, 0.5) 1px, transparent 1px)',
+                    backgroundSize: '20px 20px'
+                  }}></div>
+                </div>
+              </TiltCard>
+            </motion.div>
           ))}
         </div>
 
-      {/* MODAL */}
-      {isModalOpen && selectedProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-secondary/95 backdrop-blur-sm">
-          {/* Close */}
-          <button
-            onClick={closeModal}
-            className="absolute top-4 right-4 sm:top-8 sm:right-8 z-50 p-2 bg-white rounded-full hover:bg-gray-200 transition-all shadow-lg"
-          >
-            <X className="w-6 h-6 text-secondary" />
-          </button>
+        {/* Product Modal */}
+        <AnimatePresence>
+          {selectedProduct && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12 overflow-y-auto">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setSelectedProduct(null)}
+                className="fixed inset-0 bg-black/90 backdrop-blur-2xl"
+              />
+              
+              <motion.div
+                layoutId={`product-${selectedProduct.id}`}
+                className="relative w-full max-w-6xl bg-[#0a0f1d] border border-white/10 rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl flex flex-col md:flex-row my-auto"
+              >
+                {/* Modal Close */}
+                <button 
+                  onClick={() => setSelectedProduct(null)}
+                  className="absolute top-4 right-4 md:top-8 md:right-8 z-20 w-10 h-10 md:w-12 md:h-12 bg-black/50 md:bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-primary transition-colors"
+                >
+                  <X size={20} className="md:w-6 md:h-6" />
+                </button>
 
-          {/* Previous */}
-          <button
-            onClick={prevImage}
-            className="absolute left-4 sm:left-8 z-50 p-3 bg-white rounded-full hover:bg-gray-200 transition-all shadow-lg"
-          >
-            <ChevronLeft className="w-6 h-6 text-secondary" />
-          </button>
+                {/* Modal Visual */}
+                <div className="w-full md:w-1/2 relative h-64 sm:h-80 md:h-auto overflow-hidden">
+                   <img 
+                    src={selectedProduct.image} 
+                    alt={selectedProduct.title} 
+                    className="w-full h-full object-cover"
+                   />
+                   <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1d] via-transparent to-transparent"></div>
+                   
+                   {/* HUD Status */}
+                   <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 flex items-center gap-3 md:gap-4 bg-black/50 backdrop-blur-xl p-3 md:p-4 rounded-xl md:rounded-2xl border border-white/10">
+                      <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-primary animate-pulse"></div>
+                      <div className="flex flex-col">
+                        <span className="text-[8px] md:text-[10px] text-gray-400 uppercase font-black tracking-widest">Status</span>
+                        <span className="text-white text-[10px] md:text-xs font-black uppercase">Technical Verified</span>
+                      </div>
+                   </div>
+                </div>
 
-          {/* Image */}
-          <div className="relative w-full h-full flex flex-col items-center justify-center p-4 sm:p-8">
-            <ZoomableImage
-              src={selectedProduct.detailImages[currentImageIndex]}
-              alt={`${selectedProduct.title} detail ${currentImageIndex + 1}`}
-            />
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white px-6 py-2 rounded-full text-sm font-bold shadow-lg text-secondary">
-              {currentImageIndex + 1} / {selectedProduct.detailImages.length}
+                {/* Modal Info */}
+                <div className="w-full md:w-1/2 p-8 md:p-16 lg:p-20 overflow-y-auto max-h-[60vh] md:max-h-none">
+                  <div className="space-y-8 md:space-y-12">
+                    <div className="space-y-3 md:space-y-4">
+                      <span className="text-primary text-[10px] md:text-xs font-black uppercase tracking-[0.4em]">{selectedProduct.subtitle}</span>
+                      <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black text-white font-heading uppercase tracking-tighter leading-none">{selectedProduct.title}</h2>
+                    </div>
+
+                    <p className="text-base md:text-lg lg:text-xl text-gray-400 font-light leading-relaxed">{selectedProduct.description}</p>
+
+                    <div className="grid sm:grid-cols-2 gap-6 md:gap-8">
+                      <div className="space-y-4 md:space-y-6">
+                        <div className="flex items-center gap-3 text-white font-black uppercase tracking-widest text-[10px] md:text-sm">
+                          <Info size={16} className="text-primary md:w-[18px] md:h-[18px]" />
+                          Technical Specs
+                        </div>
+                        <div className="space-y-3 md:space-y-4">
+                          {selectedProduct.specs.map((spec, i) => (
+                            <div key={i} className="flex items-center gap-3 text-gray-400 group">
+                              <div className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors"></div>
+                              <span className="text-xs md:text-sm font-medium">{spec}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="p-6 md:p-8 bg-white/5 border border-white/10 rounded-2xl md:rounded-3xl flex flex-col justify-between">
+                         <div className="text-white/20 font-black text-[8px] md:text-xs uppercase tracking-widest mb-4">Quality Verified</div>
+                         <Shield className="text-primary w-10 h-10 md:w-12 md:h-12 mb-4 md:mb-6" />
+                         <div className="text-white font-black uppercase text-[10px] md:text-xs tracking-tighter">Certified 2026 Ready</div>
+                      </div>
+                    </div>
+
+                    <button className="w-full group flex items-center justify-center gap-4 md:gap-6 py-4 md:py-6 bg-primary text-white rounded-xl md:rounded-2xl font-black text-base md:text-xl hover:bg-blue-600 transition-all duration-300 shadow-xl shadow-primary/20 font-heading uppercase tracking-widest">
+                       Connect Analysis
+                       <ArrowRight size={18} className="md:w-6 md:h-6 group-hover:translate-x-3 transition-transform duration-300" />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
             </div>
-          </div>
-
-          {/* Next */}
-          <button
-            onClick={nextImage}
-            className="absolute right-4 sm:right-8 z-50 p-3 bg-white rounded-full hover:bg-gray-200 transition-all shadow-lg"
-          >
-            <ChevronRight className="w-6 h-6 text-secondary" />
-          </button>
-        </div>
-      )}
-
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn { animation: fadeIn 0.3s ease-out; }
-      `}</style>
+          )}
+        </AnimatePresence>
+      </div>
     </section>
   );
 }

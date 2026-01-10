@@ -5,20 +5,22 @@ interface TiltCardProps {
   children: React.ReactNode;
   className?: string;
   tiltMax?: number;
+  scale?: number;
 }
 
 export const TiltCard: React.FC<TiltCardProps> = ({ 
   children, 
   className = "", 
-  tiltMax = 15 
+  tiltMax = 20,
+  scale = 1.05
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 25 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 25 });
 
   // Rotate effect
   const rotateX = useTransform(
@@ -34,8 +36,6 @@ export const TiltCard: React.FC<TiltCardProps> = ({
 
   // Dynamic Glare effect position
   const opacity = useTransform(mouseXSpring, [-0.5, 0, 0.5], [0.1, 0, 0.1]);
-  // const glareX = useTransform(mouseXSpring, [-0.5, 0.5], ["0%", "100%"]);
-  // const glareY = useTransform(mouseYSpring, [-0.5, 0.5], ["0%", "100%"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
@@ -64,12 +64,14 @@ export const TiltCard: React.FC<TiltCardProps> = ({
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      whileHover={{ scale }}
       style={{
         rotateY,
         rotateX,
         transformStyle: "preserve-3d",
+        willChange: "transform",
       }}
-      className={`relative group ${className}`}
+      className={`relative group transform-gpu ${className}`}
     >
       {/* Glare/Shine Layer */}
       <motion.div

@@ -1,208 +1,127 @@
 import { motion } from "framer-motion";
-import { Award, Target, Users, TrendingUp, CheckCircle, Factory } from "lucide-react";
-import { TiltCard } from "../../components/3d/TiltCard";
-import Background3D from "../../components/3d/Background3D";
+import { Shield, Target, Users, Award, ArrowRight } from "lucide-react";
 
-export const Profile = () => {
-  const stats = [
-    { icon: Factory, value: "30+", label: "Years in Business" },
-    { icon: Users, value: "500+", label: "Happy Clients" },
-    { icon: Award, value: "ISO", label: "9001:2008 Certified" },
-    { icon: TrendingUp, value: "100%", label: "Quality Assured" }
-  ];
-
+export default function Profile() {
   const values = [
-    { icon: CheckCircle, title: "Quality First", description: "Premium materials and rigorous testing" },
-    { icon: Target, title: "Customer Focus", description: "Tailored solutions for every project" },
-    { icon: Award, title: "Excellence", description: "International standards compliance" }
+    {
+      icon: Shield,
+      title: "Hardened Reliability",
+      desc: "Our pipes are tested to withstand the harshest industrial conditions, ensuring decades of performance."
+    },
+    {
+      icon: Target,
+      title: "Engineered Precision",
+      desc: "Every millimeter matters. We maintain strict manufacturing tolerances for perfect site integration."
+    },
+    {
+      icon: Users,
+      title: "Legacy of Trust",
+      desc: "Building long-term partnerships through transparent procurement and technical excellence."
+    }
   ];
 
   return (
-    <section className="w-full bg-gradient-to-br from-black via-gray-900 to-black py-20 relative overflow-hidden">
-      <Background3D preset="profile" />
+    <section id="about" className="py-32 relative overflow-hidden bg-transparent">
+      {/* Background Decor */}
+      <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none" style={{
+         backgroundImage: 'linear-gradient(rgba(37, 99, 235, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(37, 99, 235, 0.5) 1px, transparent 1px)',
+         backgroundSize: '100px 100px'
+      }}></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
-        {/* Header Section */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <div className="inline-block px-4 py-2 bg-primary/20 backdrop-blur-sm border border-primary/50 rounded-full text-primary text-sm font-semibold uppercase tracking-wider mb-4">
-            About Us
-          </div>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 font-heading uppercase tracking-tight">
-            Company <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Profile</span>
-          </h2>
-          <p className="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
-            A.N Industries (Pvt.) Limited is a professional and leading steel Pipes and Tubes manufacturer in Pakistan. Incorporated with the Security Exchange Commission of Pakistan since 1991, our Quality Management System is certified to conform with ISO 9001:2008.
-          </p>
-        </motion.div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="group relative bg-white/5 backdrop-blur-md p-6 rounded-xl border border-white/10 hover:border-primary transition-all duration-300 hover:shadow-2xl hover:shadow-primary/20"
-              >
-                <div className="flex flex-col items-center text-center space-y-3">
-                  <div className="w-14 h-14 bg-primary/20 rounded-lg flex items-center justify-center group-hover:bg-primary transition-colors duration-300">
-                    <Icon className="w-7 h-7 text-primary group-hover:text-white transition-colors duration-300" />
-                  </div>
-                  <div className="text-3xl sm:text-4xl font-bold text-white font-heading">{stat.value}</div>
-                  <div className="text-sm text-gray-400 uppercase tracking-wide">{stat.label}</div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Images + Content Section */}
-        <div className="grid lg:grid-cols-2 gap-12 mb-20">
+        <div className="grid lg:grid-cols-2 gap-16 md:gap-20 items-center">
           
-          {/* Left: Images Grid */}
-          <div className="grid grid-cols-2 gap-4">
-            {/* Large Image - Spans 2 rows */}
-            <TiltCard className="col-span-2" tiltMax={10}>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-                className="relative group overflow-hidden rounded-xl border-2 border-white/10 shadow-2xl shadow-primary/20 hover:border-primary transition-all duration-300 h-full"
-              >
-                <img
-                  src="./Team1.png"
-                  alt="Manufacturing Facility"
-                  loading="lazy"
-                  className="w-full h-[300px] object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-              </motion.div>
-            </TiltCard>
-
-            {/* Small Image 1 */}
-            <TiltCard tiltMax={15}>
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
-                className="relative group overflow-hidden rounded-xl border-2 border-white/10 shadow-xl hover:border-primary transition-all duration-300 h-full"
-              >
-                <img
-                  src="./Team2.png"
-                  alt="Inventory"
-                  loading="lazy"
-                  className="w-full h-[200px] object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-              </motion.div>
-            </TiltCard>
-
-            {/* Small Image 2 */}
-            <TiltCard tiltMax={15}>
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                viewport={{ once: true }}
-                className="relative group overflow-hidden rounded-xl border-2 border-white/10 shadow-xl hover:border-primary transition-all duration-300 h-full"
-              >
-                <img
-                  src="./Team3.png"
-                  alt="Quality Control"
-                  loading="lazy"
-                  className="w-full h-[200px] object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-              </motion.div>
-            </TiltCard>
-          </div>
-
-          {/* Right: Values */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-3xl font-bold text-white mb-8 font-heading">Our Core Values</h3>
-            <div className="space-y-6">
-              {values.map((value, index) => {
-                const Icon = value.icon;
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="group bg-white/5 backdrop-blur-md p-6 rounded-xl border border-white/10 hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/10"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-primary transition-colors duration-300">
-                        <Icon className="w-6 h-6 text-primary group-hover:text-white transition-colors duration-300" />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold text-white mb-2 font-heading">{value.title}</h4>
-                        <p className="text-gray-400">{value.description}</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
+          {/* Left: Content */}
+          <div className="space-y-10 md:space-y-12">
+            <div className="space-y-6 text-center lg:text-left">
+              <div className="flex items-center justify-center lg:justify-start gap-4">
+                 <div className="w-8 md:w-12 h-1 bg-primary"></div>
+                 <span className="text-primary font-black uppercase tracking-[0.4em] text-[10px] md:text-xs">Our Heritage</span>
+              </div>
+              <h2 className="text-4xl sm:text-6xl md:text-8xl font-black text-white font-heading leading-tight md:leading-none uppercase tracking-tighter">
+                Forged in <br className="hidden md:block" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Excellence</span>
+              </h2>
+              <p className="text-base sm:text-lg md:text-xl text-gray-400 font-light leading-relaxed max-w-xl mx-auto lg:mx-0">
+                Established in 1991, A.N Industries has evolved from a local manufacturing unit into Pakistan's premier authority in steel pipe and conduit solutions. 
+              </p>
             </div>
 
-            {/* Additional Info Box */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="mt-8 bg-white/5 backdrop-blur-md p-6 rounded-xl border border-white/10"
-            >
-              <p className="text-gray-300 leading-relaxed">
-                The company specializes in manufacturing, exporting, and supplying MS Pipes, GI Pipes, Tubes, Rectangular & Square Hollow Sections, High-Medium-Low pressure Boiler Tubes, and other tubular products.
-              </p>
-            </motion.div>
-          </motion.div>
-        </div>
+            <div className="grid gap-8 md:gap-10">
+               {values.map((val, i) => (
+                 <motion.div 
+                   key={i}
+                   initial={{ opacity: 0, x: -30 }}
+                   whileInView={{ opacity: 1, x: 0 }}
+                   transition={{ delay: i * 0.1 }}
+                   className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-6 md:gap-8 group"
+                 >
+                    <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-xl group-hover:shadow-primary/20">
+                       <val.icon size={24} className="md:w-[28px] md:h-[28px]" />
+                    </div>
+                    <div className="space-y-2">
+                       <h3 className="text-white font-black uppercase text-base md:text-lg tracking-tight">{val.title}</h3>
+                       <p className="text-gray-500 text-xs md:text-sm leading-relaxed max-w-sm mx-auto sm:mx-0">{val.desc}</p>
+                    </div>
+                 </motion.div>
+               ))}
+            </div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center bg-white/5 backdrop-blur-md p-10 rounded-2xl border border-white/10"
-        >
-          <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 font-heading">
-            Ready to Work With Industry Leaders?
-          </h3>
-          <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-            Join hundreds of satisfied clients who trust us for their steel pipe and tube requirements.
-          </p>
-          <button
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="px-8 py-4 bg-primary text-white rounded-lg font-bold text-lg hover:bg-blue-700 transition-all duration-300 shadow-lg shadow-primary/50 hover:shadow-primary/70 hover:scale-105 font-heading uppercase tracking-wider"
-          >
-            Contact Us Today
-          </button>
-        </motion.div>
+            <div className="pt-4 md:pt-6 flex justify-center lg:justify-start">
+               <button className="group flex items-center justify-center gap-4 px-8 md:px-10 py-4 md:py-5 bg-primary text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:bg-blue-600 transition-all w-full sm:w-auto">
+                  Full Capabilities
+                  <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+               </button>
+            </div>
+          </div>
+
+          {/* Right: Visual Story */}
+          <div className="relative">
+             <div className="absolute -inset-10 bg-primary/10 blur-[100px] md:blur-[120px] rounded-full pointer-events-none"></div>
+             
+             <div className="relative space-y-6 md:space-y-8">
+                <div className="grid grid-cols-2 gap-4 md:gap-8">
+                    <div className="pt-10 md:pt-20">
+                      <div className="relative aspect-[4/5] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl group">
+                         <img 
+                           src="/hero.jpg" 
+                           alt="Legacy" 
+                           className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
+                         />
+                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                      </div>
+                   </div>
+                   <div>
+                      <div className="relative aspect-[4/5] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl group">
+                         <img 
+                           src="/steel-pipe.png" 
+                           alt="Innovation" 
+                           className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
+                         />
+                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                      </div>
+                   </div>
+                </div>
+
+                <div className="p-8 md:p-12 bg-white/5 border border-white/10 rounded-[2.5rem] md:rounded-[3.5rem] backdrop-blur-3xl relative overflow-hidden group hover:border-primary/50 transition-colors">
+                   <div className="absolute top-0 right-0 p-6 md:p-8 text-primary/10">
+                      <Award size={100} className="md:w-[150px] md:h-[150px]" />
+                   </div>
+                   <div className="relative z-10 space-y-4 md:space-y-6">
+                      <div className="text-primary font-black uppercase text-[10px] tracking-[0.4em]">Milestone 2026</div>
+                      <div className="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight font-heading uppercase tracking-tighter">Certified to Global Standards</div>
+                      <p className="text-gray-400 text-xs md:text-sm font-light leading-relaxed max-w-sm">
+                        Our commitment to quality is validated by international ISO certifications and the trust of thousands of clients across Pakistan.
+                      </p>
+                   </div>
+                </div>
+             </div>
+          </div>
+
+        </div>
 
       </div>
     </section>
   );
-};
+}

@@ -2,13 +2,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #1A365D;
-  /* Dark Blue */
+  --color-primary: #2563eb;
+  /* Radiant Blue */
   --color-secondary: #0A0A0A;
   /* Black */
-  --color-accent: #1A365D;
-  /* Dark Blue (mapped to primary for strictness) */
-  --color-text-muted: #64748B;
+  --color-accent: #3b82f6;
+  /* Light Blue */
+  --color-text-muted: #94a3b8;
   /* Gray */
   --color-bg-light: #FFFFFF;
   /* White */
@@ -19,8 +19,7 @@
 
 /* Global Dark Theme */
 body {
-  background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 50%, #0A0A0A 100%);
-  background-attachment: fixed;
+  background: transparent;
   min-height: 100vh;
   color: #FFFFFF;
 }

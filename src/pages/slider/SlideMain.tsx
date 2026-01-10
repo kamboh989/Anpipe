@@ -1,12 +1,14 @@
-
-import Slide1 from "./Slide1";
-import FeaturesSection from "./FeaturesSection";
+import { useRef } from "react";
+import IndustrialSlider3D from "./IndustrialSlider3D";
 
 export default function SlideMain() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
-    <div className="relative w-full">
-      <Slide1 />
-      <FeaturesSection />
+    <div ref={containerRef} className="relative w-full h-[400vh]" style={{ position: 'relative' }}>
+      <div className="sticky top-0 w-full h-screen overflow-hidden">
+        <IndustrialSlider3D target={containerRef} />
+      </div>
     </div>
   );
 }

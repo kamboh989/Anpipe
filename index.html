@@ -1,13 +1,153 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>an-pipe</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO Meta Tags -->
+  <title>A.N Industries | Engineering Steel & Industrial Piping</title>
+  <meta name="description"
+    content="A.N Industries - Leading manufacturer of high-quality M.S. and G.I. pipes in Pakistan. Excellence in engineering since 1991." />
+  <meta name="keywords"
+    content="A.N Industries, Steel Pipes, GI Pipes, MS Pipes, Engineering Steel, Industrial Piping, Lahore, Pakistan" />
+
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --bg: #030712;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--bg);
+      font-family: 'Outfit', sans-serif;
+      overflow: hidden;
+    }
+
+    #initial-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: radial-gradient(circle at center, #0f172a 0%, #030712 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+    }
+
+    .loader-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .loader-logo {
+      width: 120px;
+      height: 120px;
+      position: relative;
+      animation: logo-pulse 2.5s infinite ease-in-out;
+    }
+
+    .loader-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 30px rgba(37, 99, 235, 0.3));
+    }
+
+    .loader-bar-container {
+      width: 240px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .loader-bar {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      width: 100%;
+      animation: sweep 2s infinite ease-in-out;
+    }
+
+    .loader-text {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5em;
+      font-weight: 900;
+      margin-left: 0.5em;
+    }
+
+    @keyframes logo-pulse {
+
+      0%,
+      100% {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
+
+      50% {
+        transform: scale(1.05);
+        opacity: 1;
+      }
+    }
+
+    @keyframes sweep {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    body.loaded #initial-loader {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    body.loaded {
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="initial-loader">
+    <div class="loader-content">
+      <div class="loader-logo">
+        <img src="/logo.png" alt="A.N Industries Logo" />
+      </div>
+      <div class="loader-bar-container">
+        <div class="loader-bar"></div>
+      </div>
+      <div class="loader-text">Initializing Systems</div>
+    </div>
+  </div>
+
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.body.classList.add('loaded');
+      }, 1500);
+    });
+  </script>
+</body>
+
 </html>
