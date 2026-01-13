@@ -69,10 +69,16 @@ export default function Profile() {
             </div>
 
             <div className="pt-4 md:pt-6 flex justify-center lg:justify-start">
-               <button className="group flex items-center justify-center gap-4 px-8 md:px-10 py-4 md:py-5 bg-primary text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:bg-blue-600 transition-all w-full sm:w-auto">
+                <button 
+                  onClick={() => {
+                    const section = document.getElementById("products");
+                    section?.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}
+                  className="group flex items-center justify-center gap-4 px-8 md:px-10 py-4 md:py-5 bg-primary text-white rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:bg-blue-600 transition-all w-full sm:w-auto"
+                >
                   Full Capabilities
                   <ArrowRight className="group-hover:translate-x-2 transition-transform" />
-               </button>
+                </button>
             </div>
           </div>
 

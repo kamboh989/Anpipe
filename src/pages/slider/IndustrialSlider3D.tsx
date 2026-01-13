@@ -247,7 +247,22 @@ function HTMLOverlay({ progress }: { progress: any }) {
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 pt-6 pointer-events-auto">
-                  <button className="w-full sm:w-auto group relative flex items-center justify-center gap-4 sm:gap-6 px-8 sm:px-12 py-4 sm:py-6 bg-primary text-white rounded-2xl font-black text-lg sm:text-xl hover:bg-blue-600 transition-all duration-500 shadow-[0_20px_40px_-10px_rgba(37,99,235,0.4)] overflow-hidden font-heading uppercase tracking-widest">
+                  <button 
+                    onClick={() => {
+                      const mapping: Record<number, string> = {
+                        0: "products",
+                        1: "products",
+                        2: "clients",
+                        3: "contact"
+                      };
+                      const id = mapping[i];
+                      if (id) {
+                        const section = document.getElementById(id);
+                        section?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }
+                    }}
+                    className="w-full sm:w-auto group relative flex items-center justify-center gap-4 sm:gap-6 px-8 sm:px-12 py-4 sm:py-6 bg-primary text-white rounded-2xl font-black text-lg sm:text-xl hover:bg-blue-600 transition-all duration-500 shadow-[0_20px_40px_-10px_rgba(37,99,235,0.4)] overflow-hidden font-heading uppercase tracking-widest"
+                  >
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
                     <span className="relative">{stage.cta}</span>
                     <ArrowRight className="relative w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-3 transition-transform duration-500" />

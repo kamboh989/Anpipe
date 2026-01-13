@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Package, Shield, ArrowRight, X, ChevronRight, Settings, Info } from "lucide-react";
 import { TiltCard } from "../../components/3d/TiltCard";
 
@@ -50,6 +51,22 @@ const products: ProductType[] = [
 export default function Product() {
   const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("All");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleConnectAnalysis = () => {
+    setSelectedProduct(null);
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        const section = document.getElementById("contact");
+        section?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 300);
+    } else {
+      const section = document.getElementById("contact");
+      section?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   const categories = ["All", "Industrial", "Structural", "Commercial"];
   const filteredProducts = activeCategory === "All" 
@@ -227,7 +244,10 @@ export default function Product() {
                       </div>
                     </div>
 
-                    <button className="w-full group flex items-center justify-center gap-4 md:gap-6 py-4 md:py-6 bg-primary text-white rounded-xl md:rounded-2xl font-black text-base md:text-xl hover:bg-blue-600 transition-all duration-300 shadow-xl shadow-primary/20 font-heading uppercase tracking-widest">
+                    <button 
+                      onClick={handleConnectAnalysis}
+                      className="w-full group flex items-center justify-center gap-4 md:gap-6 py-4 md:py-6 bg-primary text-white rounded-xl md:rounded-2xl font-black text-base md:text-xl hover:bg-blue-600 transition-all duration-300 shadow-xl shadow-primary/20 font-heading uppercase tracking-widest"
+                    >
                        Connect Analysis
                        <ArrowRight size={18} className="md:w-6 md:h-6 group-hover:translate-x-3 transition-transform duration-300" />
                     </button>

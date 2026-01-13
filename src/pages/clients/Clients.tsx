@@ -126,7 +126,13 @@ export default function Clients() {
                  <h3 className="text-white font-black uppercase text-xl md:text-2xl tracking-tight">Become a Partner</h3>
                  <p className="text-gray-400 text-xs md:text-sm font-light">Join Pakistan's leading network of industrial infrastructure developers.</p>
               </div>
-              <button className="px-8 md:px-10 py-4 md:py-5 bg-primary text-white rounded-xl md:rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:bg-blue-600 transition-all active:scale-95 w-full md:w-auto">
+              <button 
+                onClick={() => {
+                  const section = document.getElementById("contact");
+                  section?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="px-8 md:px-10 py-4 md:py-5 bg-primary text-white rounded-xl md:rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:bg-blue-600 transition-all active:scale-95 w-full md:w-auto"
+              >
                  Register Interest
               </button>
            </motion.div>

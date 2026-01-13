@@ -10,7 +10,8 @@ export const Header = () => {
 
   const menuItems = [
     { name: "Products", id: "products", type: "scroll" },
-    { name: "About", id: "profile", type: "scroll" },
+    { name: "Features", id: "features", type: "scroll" },
+    { name: "About", id: "about", type: "scroll" },
     { name: "Catalogue", path: "/catalogue", type: "route" },
     { name: "Clients", id: "clients", type: "scroll" },
     { name: "Contact", id: "contact", type: "scroll" },
@@ -54,7 +55,7 @@ export const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${
+      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 pointer-events-auto ${
         hide ? "-translate-y-full" : "translate-y-0"
       } ${
         scrolled || mobileOpen
@@ -66,8 +67,7 @@ export const Header = () => {
         {/* LOGO */}
         <button 
           onClick={() => {
-            if (location.pathname === "/") window.scrollTo({ top: 0, behavior: 'smooth' });
-            else navigate("/");
+            handleScrollTo("home");
             setMobileOpen(false);
           }} 
           className="group flex items-center gap-4 z-[110]"
@@ -122,7 +122,7 @@ export const Header = () => {
 
         {/* Mobile Toggle */}
         <button
-          className="lg:hidden z-[110] p-3 bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 text-white hover:text-primary transition-colors"
+          className="lg:hidden z-[130] p-3 bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 text-white hover:text-primary transition-colors"
           onClick={() => setMobileOpen(!mobileOpen)}
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
@@ -133,11 +133,11 @@ export const Header = () => {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 bg-black/98 backdrop-blur-3xl z-[100] flex flex-col pt-32 px-10 lg:hidden"
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 bg-black z-[120] flex flex-col p-6 pt-24 sm:p-10 sm:pt-32 lg:hidden overflow-y-auto h-screen"
           >
              <div className="flex flex-col gap-6">
                 {menuItems.map((item, i) => (
@@ -150,7 +150,7 @@ export const Header = () => {
                     {item.type === "scroll" ? (
                       <button
                         onClick={() => handleScrollTo(item.id!)}
-                        className="text-4xl sm:text-5xl font-black text-white hover:text-primary transition-colors font-heading uppercase tracking-tighter"
+                        className="text-3xl sm:text-5xl font-black text-white hover:text-primary transition-colors font-heading uppercase tracking-tighter"
                       >
                         {item.name}
                       </button>
@@ -158,7 +158,7 @@ export const Header = () => {
                       <Link
                         to={item.path!}
                         onClick={() => setMobileOpen(false)}
-                        className="text-4xl sm:text-5xl font-black text-white hover:text-primary transition-colors font-heading uppercase tracking-tighter"
+                        className="text-3xl sm:text-5xl font-black text-white hover:text-primary transition-colors font-heading uppercase tracking-tighter"
                       >
                         {item.name}
                       </Link>
@@ -167,7 +167,7 @@ export const Header = () => {
                 ))}
              </div>
 
-             <div className="mt-auto pb-16 space-y-8">
+             <div className="mt-12 pb-10 space-y-6">
                 <div className="w-full h-px bg-white/10"></div>
                 <div className="flex flex-col gap-4">
                    <button 

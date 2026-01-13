@@ -14,9 +14,12 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 
 export const Footer: React.FC = () => {
   const [email, setEmail] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +30,8 @@ export const Footer: React.FC = () => {
 
   const quickLinks = [
     { name: "Home", href: "home", type: "scroll" },
-    { name: "About Us", href: "about", type: "scroll" },
+    { name: "Features", href: "features", type: "scroll" },
+    { name: "About Us", href: "about", type: "scroll" }, // Changed href to match about section in App.tsx
     { name: "Products", href: "products", type: "scroll" },
     { name: "Clients", href: "clients", type: "scroll" },
     { name: "Contact", href: "contact", type: "scroll" },
@@ -35,16 +39,20 @@ export const Footer: React.FC = () => {
   ];
 
   const handleScrollTo = (id: string) => {
-    const section = document.getElementById(id);
-    section?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        const section = document.getElementById(id);
+        section?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 300);
+    } else {
+      const section = document.getElementById(id);
+      section?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   return (
-    <footer className="relative w-full bg-black text-gray-300 overflow-hidden font-sans">
+    <footer className="relative w-full bg-black text-gray-300 overflow-hidden font-sans pointer-events-auto">
       {/* Dynamic Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
@@ -106,7 +114,7 @@ export const Footer: React.FC = () => {
           {/* Brand Identity Section */}
           <div className="space-y-8 text-center sm:text-left">
             <div className="space-y-6">
-              <div className="flex items-center justify-center sm:justify-start gap-4 group cursor-pointer" onClick={scrollToTop}>
+              <div className="flex items-center justify-center sm:justify-start gap-4 group cursor-pointer" onClick={() => handleScrollTo("home")}>
                 <div className="relative">
                   <div className="absolute inset-0 bg-primary/40 rounded-xl blur-lg group-hover:blur-xl transition-all"></div>
                   <div className="relative p-2.5 bg-white rounded-xl shadow-2xl">
@@ -157,14 +165,14 @@ export const Footer: React.FC = () => {
                       {link.name}
                     </button>
                   ) : (
-                    <a
-                      href={link.href}
+                    <Link
+                      to={link.href}
                       className="group flex items-center justify-center sm:justify-start gap-3 text-gray-400 hover:text-primary transition-all duration-300 text-sm md:text-base font-medium"
                     >
                       <span className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-primary/40 group-hover:bg-primary group-hover:scale-150 transition-all"></span>
                       {link.name}
                       <ExternalLink size={10} className="md:w-3 md:h-3 opacity-30 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-                    </a>
+                    </Link>
                   )}
                 </li>
               ))}
@@ -293,7 +301,7 @@ export const Footer: React.FC = () => {
              <motion.button
                whileHover={{ y: -5, scale: 1.1 }}
                whileTap={{ scale: 0.9 }}
-               onClick={scrollToTop}
+               onClick={() => handleScrollTo("home")}
                className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all duration-500 shadow-xl"
              >
                <ChevronUp size={20} />
